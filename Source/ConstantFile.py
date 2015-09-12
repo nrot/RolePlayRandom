@@ -10,5 +10,7 @@ BIG_HELP = u"help - показать эту подсказку \n " \
 GUNS_TABLE = "Table/Guns.xlsx"
 ITEM_TABLE = "Table/Item.xlsx"
 SHIP_TABLE = "Table/Ship.xlsx"
+PLANET_TABLE ="Table/PLanet.xlsx"
+MANY_TABLE = [GUNS_TABLE, ITEM_TABLE, SHIP_TABLE]
 AMOUNT_ITEM_MIN = 0
 AMOUNT_ITEM_MAX = 5

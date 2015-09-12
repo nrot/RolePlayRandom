@@ -4,14 +4,12 @@ __author__ = 'nrot'
 
 import Source.ConstantFile as Constant
 import random
-import Source.Type_table
+
 
 class LootRandom(object):
     def __init__(self):
 
-        self.Item = Source.Type_table.Type_table(Constant.ITEM_TABLE)
-        self.Guns = Source.Type_table.Type_table(Constant.GUNS_TABLE)
-        self.Ship = Source.Type_table.Type_table(Constant.SHIP_TABLE)
+
 
         random.seed()
 
