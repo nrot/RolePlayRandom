@@ -6,7 +6,6 @@ import xlrd
 import Source.FileClassPack
 import Source.ConstantFile as Constant
 import Source.LootRandom
-import Source.f_Table_to_list as fttl
 
 def main():
 
@@ -16,7 +15,6 @@ def main():
 
     LootRandom = Source.LootRandom.LootRandom()
 
-    table = fttl.Table_to_list(Constant.GUNS_TABLE)
 
     Global_Run = True
     while (Global_Run):

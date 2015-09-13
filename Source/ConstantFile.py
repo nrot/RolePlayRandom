@@ -14,3 +14,12 @@ PLANET_TABLE ="Table/PLanet.xlsx"
 MANY_TABLE = [GUNS_TABLE, ITEM_TABLE, SHIP_TABLE]
 AMOUNT_ITEM_MIN = 0
 AMOUNT_ITEM_MAX = 5
+
+NAME_BRANCH = "name_branch"
+CHANCE = "Chance"
+INFO_START = "info_start"
+INFO_STOP = "info_stop"
+INFO = "info"
+UNIQUE_START = "unique_start"
+UNIQUE_STOP = "unique_stop"
+UNIQUE = "unique"

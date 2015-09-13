@@ -4,11 +4,17 @@ __author__ = 'nrot'
 
 import Source.ConstantFile as Constant
 import random
-
+import Source.classTree
+import Source.f_Table_to_list as fttl
 
 class LootRandom(object):
     def __init__(self):
 
+        self.Guns = Source.classTree.classTree("Gun", None)
+        self.Guns.parser(fttl.Table_to_list(Constant.GUNS_TABLE))
+
+        """self.Item = Source.classTree.classTree("Item", None)
+        self.Item.parser(fttl.Table_to_list(Constant.ITEM_TABLE))"""
 
 
         random.seed()
@@ -20,14 +26,15 @@ class LootRandom(object):
         Cans_Table = []
         i = 0
         if size == "small":
-            Cans_Table.append(self.Item)
+            #Cans_Table.append(self.Item)
+            0
         elif size == "medium":
-            Cans_Table.append(self.Item)
+           #Cans_Table.append(self.Item)
             Cans_Table.append(self.Guns)
         elif size == "big":
-            Cans_Table.append(self.Item)
+            #Cans_Table.append(self.Item)
             Cans_Table.append(self.Guns)
-            Cans_Table.append(self.Ship)
+            #Cans_Table.append(self.Ship)
 
         while i < Amount_Item:
             choice_item = random.choice(Cans_Table)
