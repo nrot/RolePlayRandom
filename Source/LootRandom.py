@@ -25,6 +25,7 @@ class LootRandom(object):
         Items = []
         Cans_Table = []
         i = 0
+        item = []
         if size == "small":
             #Cans_Table.append(self.Item)
             0
@@ -38,9 +39,9 @@ class LootRandom(object):
 
         while i < Amount_Item:
             choice_item = random.choice(Cans_Table)
-            
+            item.append(choice_item.ChildRandom())
             i += 1
-
+        return item
 
 
 

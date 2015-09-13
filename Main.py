@@ -22,7 +22,7 @@ def main():
         if Input_string == u"Помощь":
             Log.write(aType='simple', text=Constant.BIG_HELP)
         elif Input_string == "LootRandom":
-            LootRandom.Generate()
+            print(str(LootRandom.Generate()))
 
 
     return 0

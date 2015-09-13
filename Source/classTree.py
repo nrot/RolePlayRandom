@@ -11,6 +11,7 @@ class classTree(object):
         self.amount_branch = 0
         self.branchs = []
         self.info = []
+        self.amount_unique = 0
         self.unique = []
     def addBranch(self, branch, chance="one"):
         cache = [branch, chance]
@@ -21,8 +22,8 @@ class classTree(object):
         self.info.append(info)
 
     def addUnique(self, unique):
-        self.unique.append(unique )
-
+        self.unique.append(unique)
+        self.amount_unique += 1
     def parser(self, table):
 
         if not table or not table[0]:
@@ -114,7 +115,11 @@ class classTree(object):
             i[0].parser(c_table)
 
     def ChildRandom(self):
-        if not not self.branchs:
-            c_list = []
-            c_list.append(self.branchs[random.randint(0, self.amount_branch)][0].ChildRandom())
-            return c_list
+        c_list = []
+        c_list.append(self.name)
+
+        if not not self.branchs and not not self.branchs[0]:
+            c_list.append(self.branchs[random.randint(0, self.amount_branch - 1)][0].ChildRandom())
+        if not not self.unique and not not self.unique[0]:
+            c_list.append(self.unique[random.randint(0, self.amount_unique - 1)])
+        return c_list
