@@ -1,8 +1,12 @@
 __author__ = 'nrot'
 
-import Source.ConstantFile as Constant
-import Source.f_Part_of_table as fpot
 import random
+
+import Source.ConstantFile as Constant
+import Source.Function.f_Part_of_table as fpot
+import Source.classCost as classCost
+import Source.classUnique as classUnique
+
 
 class classTree(object):
     def __init__(self, name, parentLink):
@@ -11,8 +15,8 @@ class classTree(object):
         self.amount_branch = 0
         self.branchs = []
         self.info = []
-        self.amount_unique = 0
-        self.unique = []
+        self.unique = None
+        self.Cost = None
     def addBranch(self, branch, chance="one"):
         cache = [branch, chance]
         self.branchs.append(cache)
@@ -22,8 +26,7 @@ class classTree(object):
         self.info.append(info)
 
     def addUnique(self, unique):
-        self.unique.append(unique)
-        self.amount_unique += 1
+        self.unique = classUnique.classUnique(unique)
     def parser(self, table):
 
         if not table or not table[0]:
@@ -47,6 +50,8 @@ class classTree(object):
             elif i == Constant.UNIQUE_STOP:
                 flag_unique = False
                 mask.append(Constant.UNIQUE_STOP)
+            elif i == Constant.COST:
+                mask.append(Constant.COST)
             else:
                 if flag_info:
                     mask.append(Constant.INFO)
@@ -73,7 +78,10 @@ class classTree(object):
                     elif mask[Iter] == Constant.INFO_START:
                         info_c = []
                         while mask[Iter] != Constant.INFO_STOP:
-                            info_c.append(i[Iter])
+                            if mask[Iter] == Constant.COST:
+                                self.Cost = classCost.classCost(i[Iter])
+                            else:
+                                info_c.append(i[Iter])
                             Iter += 1
                         self.branchs[self.amount_branch - 1][0].addInfo(info_c)
                     elif mask[Iter] == Constant.UNIQUE_START:
@@ -114,12 +122,17 @@ class classTree(object):
             v_i += 1
             i[0].parser(c_table)
 
-    def ChildRandom(self):
-        c_list = []
-        c_list.append(self.name)
+    def RandomItem(self):
+        c_list = ""
+        c_list += self.name + " "
 
-        if not not self.branchs and not not self.branchs[0]:
-            c_list.append(self.branchs[random.randint(0, self.amount_branch - 1)][0].ChildRandom())
-        if not not self.unique and not not self.unique[0]:
-            c_list.append(self.unique[random.randint(0, self.amount_unique - 1)])
+        if self.Cost:
+            c_list += str(self.Cost.getRandomCost()) + " "
+
+        if self.branchs and self.branchs[0]:
+            c_list += str(self.branchs[random.randint(0, self.amount_branch - 1)][0].ChildRandom()) + " "
+
+        if self.unique and self.unique[0]:
+            c_list += str(self.unique.getRandomUnique) + " "
+
         return c_list

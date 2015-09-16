@@ -18,6 +18,7 @@ AMOUNT_ITEM_MAX = 1
 NAME_BRANCH = "name_branch"
 CHANCE = "Chance"
 INFO_START = "info_start"
+COST = "cost"
 INFO_STOP = "info_stop"
 INFO = "info"
 UNIQUE_START = "unique_start"

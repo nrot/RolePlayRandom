@@ -2,10 +2,12 @@ __author__ = 'nrot'
 
 # -*- coding: utf-8 -*-
 
-import Source.ConstantFile as Constant
 import random
+
+import Source.ConstantFile as Constant
 import Source.classTree
-import Source.f_Table_to_list as fttl
+import Source.Function.f_Table_to_list as fttl
+
 
 class LootRandom(object):
     def __init__(self):
@@ -39,7 +41,7 @@ class LootRandom(object):
 
         while i < Amount_Item:
             choice_item = random.choice(Cans_Table)
-            item.append(choice_item.ChildRandom())
+            item.append(choice_item.RandomItem())
             i += 1
         return item
 

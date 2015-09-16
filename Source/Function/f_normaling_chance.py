@@ -1,6 +1,9 @@
 __author__ = 'nrot'
 
-def f_Cost_to_list(in_str):
+# -*- coding: utf-8 -*-
+
+def f_normaling_chance(in_str):
+
     first = True
     i_first = []
     i_second = []
@@ -13,7 +16,8 @@ def f_Cost_to_list(in_str):
             i_first.append(i)
         else:
             i_second.append(i)
+
     if not i_second:
-        return int(i_first)
+        return [int(i_first), int(i_first)]
     else:
-        return [int(i_first),int(i_second)]
+        return [int(i_first), int(i_second)]
