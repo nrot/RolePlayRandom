@@ -31,7 +31,6 @@ class classUnique(object):
         flag = True
         i = 0
 
-        while flag:
-            if self.chance[i].minChance >= number and number <= self.chance[i].maxChance:
-                return self.unique[i]
-            i += 1
+        for i in self.chance:
+            if i.minChance >= number and number <= i.maxChance:
+                return self.unique[self.chance.index(i)]

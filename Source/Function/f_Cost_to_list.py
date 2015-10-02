@@ -8,9 +8,16 @@ def f_Cost_to_list(in_str):
     first = True
     i_first = ""
     i_second = ""
+    new_str = ""
 
+    if isinstance(in_str, float):
+        new_str = str(int(in_str))
+    elif in_str == "":
+        new_str = "0"
+    else:
+        new_str = in_str
 
-    for i in in_str:
+    for i in new_str:
         if i == "-":
             first = False
             continue

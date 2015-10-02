@@ -19,7 +19,7 @@ class LootRandom(object):
         self.Item.parser(fttl.Table_to_list(Constant.ITEM_TABLE))"""
 
 
-        random.seed()
+        #random.seed()
 
     def Generate(self, size="medium"):
 

@@ -127,12 +127,14 @@ class classTree(object):
         c_list += self.name + " "
 
         if self.Cost:
-            c_list += str(self.Cost.getRandomCost()) + " "
+            c_list += "Cost = " + str(self.Cost.getRandomCost()) + " "
 
         if self.branchs and self.branchs[0]:
-            c_list += str(self.branchs[random.randint(0, self.amount_branch - 1)][0].ChildRandom()) + " "
+            c_list += str(self.branchs[random.randint(0, self.amount_branch - 1)][0].RandomItem()) + " "
 
-        if self.unique and self.unique[0]:
-            c_list += str(self.unique.getRandomUnique) + " "
+        if self.unique:
+            c_list += str(self.unique.getRandomUnique()) + " "
+        if self.info and self.info[0]:
+            c_list += str(self.info)
 
         return c_list
