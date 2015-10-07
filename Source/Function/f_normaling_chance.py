@@ -2,6 +2,7 @@ __author__ = 'nrot'
 
 # -*- coding: utf-8 -*-
 
+
 def f_normaling_chance(in_str):
 
     first = True

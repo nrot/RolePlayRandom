@@ -6,44 +6,42 @@ import random
 
 import Source.ConstantFile as Constant
 import Source.classTree
-import Source.Function.f_Table_to_list as fttl
+import Source.Function.f_table_to_list as Fttl
 
 
 class LootRandom(object):
     def __init__(self):
 
         self.Guns = Source.classTree.classTree("Gun", None)
-        self.Guns.parser(fttl.Table_to_list(Constant.GUNS_TABLE))
+        self.Guns.parser(Fttl.table_to_list(Constant.GUNS_TABLE))
 
         """self.Item = Source.classTree.classTree("Item", None)
-        self.Item.parser(fttl.Table_to_list(Constant.ITEM_TABLE))"""
+        self.Item.parser(Fttl.Table_to_list(Constant.ITEM_TABLE))"""
 
+        # random.seed()
 
-        #random.seed()
+    def generate(self, size="medium"):
 
-    def Generate(self, size="medium"):
-
-        Amount_Item = random.randint(Constant.AMOUNT_ITEM_MIN, Constant.AMOUNT_ITEM_MAX)
-        Items = []
-        Cans_Table = []
-        i = 0
+        amount_item = random.randint(Constant.AMOUNT_ITEM_MIN, Constant.AMOUNT_ITEM_MAX)
+        cans_table = []
         item = []
         if size == "small":
-            #Cans_Table.append(self.Item)
+            # cans_table.append(self.Item)
             0
         elif size == "medium":
-           #Cans_Table.append(self.Item)
-            Cans_Table.append(self.Guns)
+            # cans_table.append(self.Item)
+            cans_table.append(self.Guns)
         elif size == "big":
-            #Cans_Table.append(self.Item)
-            Cans_Table.append(self.Guns)
-            #Cans_Table.append(self.Ship)
-
-        while i < Amount_Item:
-            choice_item = random.choice(Cans_Table)
+            # cans_table.append(self.Item)
+            cans_table.append(self.Guns)
+            # cans_table.append(self.Ship)
+        prev = None
+        for i in range(0, amount_item):
+            choice_item = random.choice(cans_table)
+            if i != 0 and prev != choice_item:
+                item.append(choice_item.GetMask())
+            elif i == 0:
+                item.append(choice_item.GetMask())
             item.append(choice_item.RandomItem())
-            i += 1
+            prev = choice_item
         return item
-
-
-

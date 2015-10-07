@@ -2,9 +2,10 @@ __author__ = 'nrot'
 
 # -*- coding: utf-8 -*-
 
-import Source.Function.f_K_to_thousand as fktt
+import Source.Function.f_k_to_thousand as fktt
 
-def f_Cost_to_list(in_str):
+
+def f_cost_to_list(in_str):
     first = True
     i_first = ""
     i_second = ""
@@ -26,8 +27,8 @@ def f_Cost_to_list(in_str):
         else:
             i_second += i
 
-    i_first = fktt.f_K_to_thousand(i_first)
-    i_second = fktt.f_K_to_thousand(i_second)
+    i_first = fktt.f_k_to_thousand(i_first)
+    i_second = fktt.f_k_to_thousand(i_second)
 
     if not i_second:
         return [int(i_first), int(i_first)]

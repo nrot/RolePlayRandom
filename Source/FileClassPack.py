@@ -4,17 +4,19 @@ __author__ = 'nrot'
 
 import os
 import time
-import shutil
+"""import shutil
 import xml.etree.ElementTree as XMLElementTree
-import glob
-#from lxml import etree
+import glob"""
+
+
+# from lxml import etree
 
 
 class DoubleLog(object):
     def __init__(self, inpath, namefile):
         self.path = os.path.expanduser(inpath)
         try:
-            if (os.path.getsize(self.path + namefile) > 10240):
+            if os.path.getsize(self.path + namefile) > 10240:
                 os.remove(self.path + namefile)
         except:
             if os.path.exists(self.path) == 0:
@@ -26,27 +28,29 @@ class DoubleLog(object):
             self.Error = 'Done'
         except:
             print('Can`t open ', self.path, namefile)
-            #self.CommandToKdeError = 'kdialog --error \'Can`t open file ' + self.path + namefile + ' \n Program will close. \' --title \'New Fons\''
-            #print(self.CommandToKdeError)
-            #os.system(self.CommandToKdeError)
+            # self.CommandToKdeError = 'kdialog --error \'Can`t open file ' + self.path + namefile + ' \n Program will close. \' --title \'New Fons\''
+            # print(self.CommandToKdeError)
+            # os.system(self.CommandToKdeError)
             self.Error = 'Open Error'
 
     def __del__(self):
         self.objlogfile.close()
 
-    def write(self, aType='simple', text='nothing', aTime=10):
-        if aType == 'connect':
-            print('Can`t connect to ', str(text), '\nwait ' + str(aTime) + 'min and i try connect again.\n')
-            self.objlogfile.write('Can`t connect to ' + str(text) + '\nwait ' + str(aTime) + ' min and i try connect again.\n')
+    def write(self, atype='simple', text='nothing', atime=10):
+        if atype == 'connect':
+            print('Can`t connect to ', str(text), '\nwait ' + str(atime) + 'min and i try connect again.\n')
             self.objlogfile.write(
-                '#######################################################################################################\n')
+                'Can`t connect to ' + str(text) + '\nwait ' + str(atime) + ' min and i try connect again.\n')
+            self.objlogfile.write(
+                '#################################################'
+                '######################################################\n')
             self.objlogfile.write('\n')
-        elif aType == 'simple':
+        elif atype == 'simple':
             print(text)
             self.objlogfile.write(text)
             self.objlogfile.write('\n')
         return 'Done'
-    
+
     def save(self):
         self.objlogfile.flush()
 

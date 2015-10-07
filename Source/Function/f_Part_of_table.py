@@ -1,7 +1,7 @@
 __author__ = 'nrot'
 
-def f_Part_of_table(table, start_col, stop_col, start_row=None, stop_row=None):
 
+def f_part_of_table(table, start_col, stop_col, start_row=None, stop_row=None):
     list = []
 
     if start_row == None and stop_row == None:
@@ -22,8 +22,8 @@ def f_Part_of_table(table, start_col, stop_col, start_row=None, stop_row=None):
             x += 1
     return list
 
-def f_Part_of_list(list, start, stop):
 
+def f_part_of_list(list, start, stop):
     c_list = []
     x = start
 

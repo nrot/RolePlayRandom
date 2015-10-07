@@ -3,9 +3,9 @@ __author__ = 'nrot'
 import random
 
 import Source.ConstantFile as Constant
-import Source.Function.f_Part_of_table as fpot
+import Source.Function.f_part_of_table as fpot
 import Source.classCost as classCost
-import Source.classUnique as classUnique
+import Source.ClassUnique as classUnique
 
 
 class classTree(object):
@@ -17,6 +17,7 @@ class classTree(object):
         self.info = []
         self.unique = None
         self.Cost = None
+
     def addBranch(self, branch, chance="one"):
         cache = [branch, chance]
         self.branchs.append(cache)
@@ -26,7 +27,8 @@ class classTree(object):
         self.info.append(info)
 
     def addUnique(self, unique):
-        self.unique = classUnique.classUnique(unique)
+        self.unique = classUnique.ClassUnique(unique)
+
     def parser(self, table):
 
         if not table or not table[0]:
@@ -60,65 +62,65 @@ class classTree(object):
                 else:
                     mask.append(Constant.NAME_BRANCH)
 
+        self.Mask = mask
+
         Vertical_mask = []
         v_i = 0
         for i in table:
             if i[0] != "" and i != table[0]:
                 Vertical_mask.append(v_i)
-                Iter = 0
+                iter = 0
                 flag = True
-                info_c = None
-                while flag and Iter < len(mask) and Iter < len(i):
-                    if mask[Iter] == Constant.NAME_BRANCH:
-                        if Iter > 0:
+                while flag and iter < len(mask) and iter < len(i):
+                    if mask[iter] == Constant.NAME_BRANCH:
+                        if iter > 0:
                             flag = False
                             break
-                        self.addBranch(classTree(i[Iter], self))
-                        #self.addBranch(i[Iter], i[Iter+1])
-                    elif mask[Iter] == Constant.INFO_START:
+                        self.addBranch(classTree(i[iter], self))
+                        # self.addBranch(i[iter], i[iter+1])
+                    elif mask[iter] == Constant.INFO_START:
                         info_c = []
-                        while mask[Iter] != Constant.INFO_STOP:
-                            if mask[Iter] == Constant.COST:
-                                self.Cost = classCost.classCost(i[Iter])
+                        while mask[iter] != Constant.INFO_STOP:
+                            if mask[iter] == Constant.COST:
+                                self.Cost = classCost.classCost(i[iter])
                             else:
-                                info_c.append(i[Iter])
-                            Iter += 1
+                                info_c.append(i[iter])
+                            iter += 1
                         self.branchs[self.amount_branch - 1][0].addInfo(info_c)
-                    elif mask[Iter] == Constant.UNIQUE_START:
+                    elif mask[iter] == Constant.UNIQUE_START:
                         c_unique = []
-                        while mask[Iter] != Constant.UNIQUE_STOP:
+                        while mask[iter] != Constant.UNIQUE_STOP:
                             u = v_i
-                            while table[u][Iter] != "":
-                                if mask[Iter + 1] == Constant.CHANCE:
-                                    c_unique.append([table[u][Iter], table[u][Iter + 1]])
-                                elif mask[Iter] != Constant.CHANCE:
-                                    c_unique.append(table[u][Iter])
+                            while table[u][iter] != "":
+                                if mask[iter + 1] == Constant.CHANCE:
+                                    c_unique.append([table[u][iter], table[u][iter + 1]])
+                                elif mask[iter] != Constant.CHANCE:
+                                    c_unique.append(table[u][iter])
                                 u += 1
-                            Iter += 1
+                            iter += 1
                         self.branchs[self.amount_branch - 1][0].addUnique(c_unique)
-                    Iter += 1
+                    iter += 1
             v_i += 1
         Vertical_mask.append(len(table))
 
         flag = True
-        Iter = 0
+        iter = 0
         for el_mask in mask:
             if el_mask == Constant.NAME_BRANCH:
                 if flag:
                     flag = False
                 else:
                     break
-            Iter += 1
+            iter += 1
 
         v_i = 0
         for i in self.branchs:
             c_table = []
 
-            c_table.append(fpot.f_Part_of_list(mask, Iter, len(mask)))
+            c_table.append(fpot.f_part_of_list(mask, iter, len(mask)))
             z = Vertical_mask[v_i]
-            while z < Vertical_mask[v_i + 1]:
-                c_table.append(fpot.f_Part_of_table(table, Iter, len(mask), start_row=z, stop_row=z))
-                z += 1
+            for z in range(0, Vertical_mask[v_i + 1]):
+                c_table.append(fpot.f_part_of_table(table, iter, len(mask), start_row=z, stop_row=z))
             v_i += 1
             i[0].parser(c_table)
 
@@ -127,7 +129,7 @@ class classTree(object):
         c_list += self.name + " "
 
         if self.Cost:
-            c_list += "Cost = " + str(self.Cost.getRandomCost()) + " "
+            c_list += "Cost{ " + str(self.Cost.getRandomCost()) + " }; "
 
         if self.branchs and self.branchs[0]:
             c_list += str(self.branchs[random.randint(0, self.amount_branch - 1)][0].RandomItem()) + " "
@@ -135,6 +137,20 @@ class classTree(object):
         if self.unique:
             c_list += str(self.unique.getRandomUnique()) + " "
         if self.info and self.info[0]:
-            c_list += str(self.info)
-
+            for i in self.info:
+                c_list += "INFO{ "
+                if (i is not str) and (len(i) > 0):
+                    for x in i:
+                        if x != "":
+                            c_list += str(x) + ' '
+                c_list += "};"
         return c_list
+
+    def GetMask(self):
+        if self.Mask:
+            s = ""
+            for i in self.Mask:
+                s += str(i) + ' '
+            return s
+        else:
+            return "Not Have Mask"
