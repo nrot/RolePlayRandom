@@ -16,7 +16,7 @@ def main():
 
     loot_random = Source.LootRandom.LootRandom()
     star_system_random = Source.StarSystemRandom.ClassStarSistemRandom()
-
+    # TODO: Добавить графических интерфейс используя tkinter
     global_run = True
     while global_run:
         input_string = input()

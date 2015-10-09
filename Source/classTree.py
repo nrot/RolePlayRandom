@@ -6,125 +6,111 @@ import Source.ConstantFile as Constant
 import Source.Function.f_part_of_table as fpot
 import Source.classCost as classCost
 import Source.ClassUnique as classUnique
+import Source.Function.f_list_to_mask as fltm
+import Source.ClassChance as classChance
+import Source.Function.f_sorted_chance as fsc
 
 
-class classTree(object):
-    def __init__(self, name, parentLink):
+class ClassTree(object):
+    def __init__(self, name, parent_link):
         self.name = name
-        self.Parent = parentLink
+        self.Parent = parent_link
         self.amount_branch = 0
         self.branchs = []
+        self.chance_branch = []
         self.info = []
         self.unique = None
         self.Cost = None
+        self.Mask = None
+        self.list_to_mask = fltm.f_list_to_mask
 
-    def addBranch(self, branch, chance="one"):
-        cache = [branch, chance]
-        self.branchs.append(cache)
+    def add_branch(self, branch, chance="one"):
+
+        if chance == "one":
+            cache = [branch, chance]
+            self.branchs.append(cache)
+            cache = (1 / len(self.branchs)) * 100
+            for i in range(1, len(self.branchs) + 1):
+                self.branchs[i - 1][1] = classChance.ClassChance(str((i - 1) * cache) + " - " + str(i * cache))
+        else:
+            cache = [branch, classChance.ClassChance(chance)]
+            self.branchs.append(cache)
         self.amount_branch += 1
 
-    def addInfo(self, info):
+    def add_info(self, info):
         self.info.append(info)
 
-    def addUnique(self, unique):
+    def add_unique(self, unique):
         self.unique = classUnique.ClassUnique(unique)
 
     def parser(self, table):
 
-        if not table or not table[0]:
+        if table and table[0]:
+            self.Mask = self.list_to_mask(table[0])
+        else:
             return
 
-        mask = []
-        flag_info = False
-        flag_unique = False
-        for i in table[0]:
-            if i == Constant.CHANCE:
-                mask.append(Constant.CHANCE)
-            elif i == Constant.INFO_START:
-                flag_info = True
-                mask.append(Constant.INFO_START)
-            elif i == Constant.INFO_STOP:
-                flag_info = False
-                mask.append(Constant.INFO_STOP)
-            elif i == Constant.UNIQUE_START:
-                flag_unique = True
-                mask.append(Constant.UNIQUE_START)
-            elif i == Constant.UNIQUE_STOP:
-                flag_unique = False
-                mask.append(Constant.UNIQUE_STOP)
-            elif i == Constant.COST:
-                mask.append(Constant.COST)
-            else:
-                if flag_info:
-                    mask.append(Constant.INFO)
-                elif flag_unique:
-                    mask.append(Constant.UNIQUE)
-                else:
-                    mask.append(Constant.NAME_BRANCH)
-
-        self.Mask = mask
-
-        Vertical_mask = []
+        vertical_mask = []
         v_i = 0
         for i in table:
             if i[0] != "" and i != table[0]:
-                Vertical_mask.append(v_i)
-                iter = 0
+                vertical_mask.append(v_i)
+                iteration = 0
                 flag = True
-                while flag and iter < len(mask) and iter < len(i):
-                    if mask[iter] == Constant.NAME_BRANCH:
-                        if iter > 0:
+                while flag and iteration < len(self.Mask) and iteration < len(i):
+                    if self.Mask[iteration] == Constant.NAME_BRANCH:
+                        if iteration > 0:
                             flag = False
                             break
-                        self.addBranch(classTree(i[iter], self))
-                        # self.addBranch(i[iter], i[iter+1])
-                    elif mask[iter] == Constant.INFO_START:
+                        if self.Mask[iteration + 1] == Constant.CHANCE:
+                            self.add_branch(ClassTree(i[iteration], self), chance=i[iteration + 1])
+                        else:
+                            self.add_branch(ClassTree(i[iteration], self))
+                        # self.addBranch(i[iteration], i[iteration+1])
+                    elif self.Mask[iteration] == Constant.INFO_START:
                         info_c = []
-                        while mask[iter] != Constant.INFO_STOP:
-                            if mask[iter] == Constant.COST:
-                                self.Cost = classCost.classCost(i[iter])
+                        while self.Mask[iteration] != Constant.INFO_STOP:
+                            if self.Mask[iteration] == Constant.COST:
+                                self.Cost = classCost.classCost(i[iteration])
                             else:
-                                info_c.append(i[iter])
-                            iter += 1
-                        self.branchs[self.amount_branch - 1][0].addInfo(info_c)
-                    elif mask[iter] == Constant.UNIQUE_START:
+                                info_c.append(i[iteration])
+                            iteration += 1
+                        self.branchs[self.amount_branch - 1][0].add_info(info_c)
+                    elif self.Mask[iteration] == Constant.UNIQUE_START:
                         c_unique = []
-                        while mask[iter] != Constant.UNIQUE_STOP:
+                        while self.Mask[iteration] != Constant.UNIQUE_STOP:
                             u = v_i
-                            while table[u][iter] != "":
-                                if mask[iter + 1] == Constant.CHANCE:
-                                    c_unique.append([table[u][iter], table[u][iter + 1]])
-                                elif mask[iter] != Constant.CHANCE:
-                                    c_unique.append(table[u][iter])
+                            while table[u][iteration] != "":
+                                if self.Mask[iteration + 1] == Constant.CHANCE:
+                                    c_unique.append([table[u][iteration], table[u][iteration + 1]])
+                                elif self.Mask[iteration] != Constant.CHANCE:
+                                    c_unique.append(table[u][iteration])
                                 u += 1
-                            iter += 1
-                        self.branchs[self.amount_branch - 1][0].addUnique(c_unique)
-                    iter += 1
+                            iteration += 1
+                        self.branchs[self.amount_branch - 1][0].add_unique(c_unique)
+                    iteration += 1
             v_i += 1
-        Vertical_mask.append(len(table))
+        vertical_mask.append(len(table))
 
         flag = True
-        iter = 0
-        for el_mask in mask:
+        iteration = 0
+        for el_mask in self.Mask:
             if el_mask == Constant.NAME_BRANCH:
                 if flag:
                     flag = False
                 else:
                     break
-            iter += 1
+            iteration += 1
 
         v_i = 0
         for i in self.branchs:
-            c_table = []
-
-            c_table.append(fpot.f_part_of_list(mask, iter, len(mask)))
-            z = Vertical_mask[v_i]
-            for z in range(0, Vertical_mask[v_i + 1]):
-                c_table.append(fpot.f_part_of_table(table, iter, len(mask), start_row=z, stop_row=z))
+            c_table = [fpot.f_part_of_list(self.Mask, iteration, len(self.Mask))]
+            for z in range(vertical_mask[v_i], vertical_mask[v_i + 1]):
+                c_table.append(fpot.f_part_of_table(table, iteration, len(self.Mask), start_row=z, stop_row=z))
             v_i += 1
             i[0].parser(c_table)
 
-    def RandomItem(self):
+    def random_item(self):
         c_list = ""
         c_list += self.name + " "
 
@@ -132,10 +118,16 @@ class classTree(object):
             c_list += "Cost{ " + str(self.Cost.getRandomCost()) + " }; "
 
         if self.branchs and self.branchs[0]:
-            c_list += str(self.branchs[random.randint(0, self.amount_branch - 1)][0].RandomItem()) + " "
+            l = [x[1] for x in self.branchs]
+            l = sorted(l, key=fsc.f_sorted_chance)
+            number = random.randint(l[0].minChance, l[len(l) - 1].maxChance)
+            for x in range(0, len(self.branchs)):
+                if (number >= self.branchs[x][1].minChance) and (number <= self.branchs[x][1].maxChance):
+                    c_list += str(self.branchs[x][0].random_item()) + " "
+                    break
 
         if self.unique:
-            c_list += str(self.unique.getRandomUnique()) + " "
+            c_list += str(self.unique.get_random_unique()) + " "
         if self.info and self.info[0]:
             for i in self.info:
                 c_list += "INFO{ "
@@ -146,8 +138,8 @@ class classTree(object):
                 c_list += "};"
         return c_list
 
-    def GetMask(self):
-        if self.Mask:
+    def get_mask(self):
+        if self.Mask is not None:
             s = ""
             for i in self.Mask:
                 s += str(i) + ' '

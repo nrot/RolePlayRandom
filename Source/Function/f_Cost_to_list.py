@@ -31,6 +31,6 @@ def f_cost_to_list(in_str):
     i_second = fktt.f_k_to_thousand(i_second)
 
     if not i_second:
-        return [int(i_first), int(i_first)]
+        return [int(float(i_first)), int(float(i_first))]
     else:
-        return [int(i_first), int(i_second)]
+        return [int(float(i_first)), int(float(i_second))]

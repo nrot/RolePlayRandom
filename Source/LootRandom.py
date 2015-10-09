@@ -5,14 +5,14 @@ __author__ = 'nrot'
 import random
 
 import Source.ConstantFile as Constant
-import Source.classTree
+import Source.ClassTree
 import Source.Function.f_table_to_list as Fttl
 
 
 class LootRandom(object):
     def __init__(self):
 
-        self.Guns = Source.classTree.classTree("Gun", None)
+        self.Guns = Source.ClassTree.ClassTree("Gun", None)
         self.Guns.parser(Fttl.table_to_list(Constant.GUNS_TABLE))
 
         """self.Item = Source.classTree.classTree("Item", None)
@@ -39,9 +39,9 @@ class LootRandom(object):
         for i in range(0, amount_item):
             choice_item = random.choice(cans_table)
             if i != 0 and prev != choice_item:
-                item.append(choice_item.GetMask())
+                item.append(choice_item.get_mask())
             elif i == 0:
-                item.append(choice_item.GetMask())
-            item.append(choice_item.RandomItem())
+                item.append(choice_item.get_mask())
+            item.append(choice_item.random_item())
             prev = choice_item
         return item

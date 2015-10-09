@@ -2,12 +2,13 @@ __author__ = 'nrot'
 
 # -*- coding: utf-8 -*-
 
+# TODO: Изменить хелпу, на каждую функцию свою хелпу и что бы где то был список и он регестрировлся где то (наверное объект в Main.py)
 BIG_HELP = u"help - показать эту подсказку \n " \
-          u"LootRandom - сгенерировать случайный лут \n " \
-          u"MobRandom n m - случайный моб \n n=миниальный уровень моба\n m=максимальный уровень моба" \
-          u"SellItem type - сгенерировать предметы у продовца\n" \
-          u"typ=тип продовца (guns, ship, implant, item)" \
-          u"RandomSolarSystem"
+           u"LootRandom - сгенерировать случайный лут \n " \
+           u"MobRandom n m - случайный моб \n n=миниальный уровень моба\n m=максимальный уровень моба" \
+           u"SellItem type - сгенерировать предметы у продовца\n" \
+           u"typ=тип продовца (guns, ship, implant, item)" \
+           u"RandomSolarSystem"
 GUNS_TABLE = "Table/Guns.xlsx"
 ITEM_TABLE = "Table/Item.xlsx"
 SHIP_TABLE = "Table/Ship.xlsx"
